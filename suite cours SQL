@@ -1,0 +1,210 @@
+Création d’une table dans une base de données
+
+CREATE TABLE stagiaires(id_stagiaires INT(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+                        prenom VARCHAR(100) NOT NULL,
+                        yeux VARCHAR(30) NOT NULL,
+                        genre ENUM('m','f') NOT NULL
+                       )
+
+CREATE TABLE bobons (id_bonbons INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+                        nom VARCHAR(100) NOT NULL,
+                        saveur VARCHAR(100) NOT NULL,
+                       )
+
+CREATE TABLE mange_bonbons (id_mange_bonbon INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+                        id_bonbon INT DEFAULT NULL,
+                        id_stagiaire INT DEFAULT NULL,
+                        date_manger DATE NOT NULL,
+                        quantite INT NOT NULL
+                       )
+Pour accéder au schéma des tables créé : base de données > plus > concepteur
+
+ 
+
+
+
+
+
+
+Création des clés Etrangères
+
+
+
+
+
+
+insertions des values
+INSERT INTO stagiaires (prenom, yeux, genre)
+VALUES ('Roger','marron','m'),
+('Andrea','marron','m'),
+        ('Alexandre', 'marron','m'),
+        ('Bashir', 'marron','m'),
+        ('Fayçal', 'marron','m'),
+        ('Kader', 'marron','m'),
+        ('Hawa', 'marron','f'),
+        ('Islem', 'marron','f'),
+        ('Ouarda', 'marron','f'),
+        ('Sahar', 'marron','f'),
+        ('Claire', 'marron','f')
+
+INSERT INTO bonbons(nom, saveur)
+            VALUES ('dragibus', 'cola'),
+                   ('tagada', 'fraise'),
+                   ('bams', 'banane'),
+                   ('rotella', 'reglisse'),
+                   ('floppys', 'sucre'),
+                   ('rainbollows', 'marshmallow'),
+                   ('bigharri', 'cerise'),
+                   ('oursor', 'fruits'),
+                   ('croco', 'fruits'),
+                   ('oeufoplat', 'guimauve'),
+                   ('flanbotti', 'caramel');
+
+INSERT INTO mange_bonbons (id_bonbon,id_stagiaire,date_manger,quantite)
+VALUES(4,7,'2018-12-20',5),
+                  (1,1,'2018-12-05',5),
+                  (2,2,'2018-12-03',5),
+                  (3,3,'2018-12-04',5),
+                  (5,4,'2018-12-15',5),
+                  (6,5,'2018-12-18',5),
+                  (7,6,'2018-12-22',5),
+                  (8,8,'2018-12-25',5),
+                  (9,9,'2018-12-24',5),
+                  (10,10,'2018-12-01',5),
+                  (11,11,'2018-12-06',5);
+
+table mange_bonbon
+
+
+
+
+
+
+Exercice SQL
+corrigée le 28/01/2025
+Sélectionner tous les champs de tous les enregistrements de la table *stagiaire*
+SELECT * FROM `stagiaires`
+Ajouter un nouveau stagiaire *Delmmma* en forçant la numérotation de l'id (100), yeux(vert)
+INSERT INTO stagiaires (id_stagiaires,prenom,yeux,genre) VALUES (100,'Delmmma','vert')
+Autre façon
+INSERT INTO stagiaire SET id_stagiaire = 200, prenom = ‘Delmmma’, yeux = ‘noir’, genre = ‘m’
+** Il faut respecter l’organisation de la table stagiaires (id_stagiaires,prenom,yeux,genre) 
+Ajouter un nouveau stagiaire *Mamadou* SANS forcer la numérotation de l'id, yeux(bleu)
+INSERT INTO stagiaires(id_stagiaires,prenom,yeux,genre)  VALUES ('Mamadou','bleu')
+** car l’id est auto-increment
+INSERT INTO stagiaires (prenom,yeux,genre) VALUES ('Mamadou','bleu','m')
+Changer le prénom du stagiaire qui a l'id 100 de *Delmmma* à *Delma*
+UPDATE stagiaires SET prenom = 'Delma' WHERE id_stagiaires = 100
+Autre façon
+UPDATE stagiaires SET prenom = 'Delma' WHERE prenom = ‘Delmmma’
+Rajouter dans la table mange_bonbon que Delma a mangé 5 Tagada purple le 15 septembre 2018
+UPDATE mange_bonbons SET quantite = 5, date_manger = '2018-09-15',
+1ere façon : INSERT INTO bonbons SET nom = ‘tagada’, saveur = ‘purple’
+INSERT INTO / UPDATE
+2ème façon 
+1ère insertion : 
+INSERT INTO bonbons (nom, saveur) VALUES (‘tagada’,’purple’);
+2ème insertion : 
+INSERT INTO mange_bonbon (id_bonbons, id_stagiaires, date_manger, quantite) VALUES (12, 100, '2023-09-15',5)
+Sélectionner tous les noms des bonbons as nom_bonbons
+SELECT nom AS nom_bonbons FROM `bonbons`
+Sélectionner tous les noms des bonbons en enlevant les doublons
+SELECT DISTINCT nom  AS nom_bonbons FROM `bonbons`
+Récupérer les couleurs des yeux des stagiaires
+SELECT DISTINCT yeux FROM `stagiaires`GROUP BY yeux
+Sélectionner le stagiaire qui a l'id 5
+SELECT DISTINCT * FROM `stagiaires` WHERE id_stagiaires = 5 
+SELEECT prenom, id_stagiaires WHERE id_stagiaires = 5
+Sélectionner tous les stagiaires qui ont les yeux marrons
+SELECT * FROM `stagiaires` WHERE yeux = 'marron'
+Sélectionner tous les stagiaires dont l'id est plus grand que 9
+SELECT  * FROM `stagiaires` WHERE id_stagiaires > 9
+13. Sélectionner tous les stagiaires SAUF celui dont l'id est 3
+SELECT DISTINCT * FROM `stagiaires` WHERE id_stagiaires != 3
+ou
+SELECT  * FROM `stagiaires` WHERE id_stagiaires <> 3
+ou
+SELECT * FROM stagiaire WHERE id_stagiaire < 3 OR id_stagiaire > 3
+14. Sélectionner tous les stagiaires qui ont un id inférieur ou égal à 10
+SELECT * FROM `stagiaires` WHERE id_stagiaires <= 10
+15. Sélectionner tous les stagiaires dont l'id est compris entre 7 et 11
+SELECT * FROM `stagiaires`WHERE id_stagiaires >=7 AND id_stagiaires <=10
+16. Sélectionner les stagiaires dont le prénom commence par un *S*
+SELECT prenom FROM `stagiaires` WHERE prenom LIKE 'S%'
+17. Trier les stagiaires femmes par id_stagiaires décroissant
+SELECT * FROM `stagiaires` WHERE genre = 'f' ORDER BY id_stagiaires DESC
+18. Trier les stagiaires hommes par prénom dans l'ordre alphabétique
+SELECT *FROM `stagiaires` WHERE genre = 'm' ORDER BY prenom ASC 
+19. Trier les stagiaires en affichant les femmes en premier et en classant les couleurs des yeux dans l'ordre alphabétique
+SELECT * FROM `stagiaires` ORDER BY genre DESC , yeux ASC
+20. Limiter l'affichage d'une requête de sélection de tous les stagiaires aux 3 premier résultats
+SELECT * FROM `stagiaires` LIMIT 3
+ou 0.3
+21. Limiter l'affichage d'une requête de sélection de tous les stagiaires à partir du 3ème résultat et des 5 suivants
+SELECT * FROM `stagiaires` LIMIT 5 OFFSET 2
+ou
+SELECT * FROM `stagiaires` LIMIT 2,5
+
+22. Afficher les 4 premiers stagiaires qui ont les yeux marron
+SELECT * FROM stagiaires WHERE yeux = 'marron' LIMIT 4
+23. Pareil mais en triant les prénoms dans l'ordre alphabétique
+SELECT * FROM stagiaires WHERE yeux = 'marron' 
+ORDER BY prenom ASC
+LIMIT 4
+
+24. Compter le nombre de stagiaires
+SELECT COUNT(*) AS nombre_stagiaires
+FROM stagiaires 
+25. Compter le nombre de stagiaires hommes mais en changeant le nom de la colonne de résultat par *nb_stagiaires_H*
+SELECT COUNT(*) AS nb_stagiaires_H
+FROM stagiaires 
+WHERE genre = 'm'
+26. Compter le nombre de couleurs des yeux différentes
+SELECT COUNT(DISTINCT yeux) AS nb_couleur_yeux_diff
+FROM stagiaires 
+27. Afficher le prénom et les yeux du stagiaire qui a l'id_stagiaire le plus petit
+SELECT prenom , yeux FROM stagiaires
+WHERE id_stagiaires = (SELECT MIN(id_stagiaires) FROM stagiaires)
+28. Afficher les stagiaires qui ont les yeux bleu et vert
+SELECT * FROM stagiaires WHERE yeux = 'bleu'  UNION SELECT * FROM stagiaires WHERE yeux = 'vert'
+A l'inverse maintenant, afficher les stagiaires qui n'ont pas les yeux bleu ni vert
+SELECT * FROM stagiaires WHERE (yeux != 'bleu' AND yeux = 'vert')
+ou bien
+SELECT * FROM stagiaires WHERE yeux NOT IN ('bleu', 'vert')
+
+
+
+Afficher combien de bonbons ont été consommés au total
+SELECT SUM(quantite) AS quantite_totale 
+FROM mange_bonbons
+Afficher les saveurs des bonbons (sans doublons)
+SELECT DISTINCT saveur FROM `bonbons` 
+Afficher le prénom et les yeux du stagiaire qui a l'id le plus grand /!\ c'est une 
+requête imbriquée qu'il faut faire (requête sur le résultat d'une autre requête) 
+-- Afficher le prénom et les yeux du stagiaire qui a l'id le plus grand /!\ c'est une requête imbriquée qu'il faut faire (requête sur le résultat d'une autre requête) SELECT prenom , yeux FROM stagiaires WHERE id_stagiaires = (SELECT MAX(id_stagiaires)FROM stagiaires);
+récupérer tous les stagiaires qui ont mangé des bonbons
+SELECT * FROM mange_bonbons WHERE quantite != 0
+Récupérez les informations sur les stagiaires qui ont mangé plus d'un seul bonbon
+SELECT * FROM mange_bonbons WHERE quantite >= 1
+Afficher le prénom du stagiaire, le nom du bonbon, la date de consommation pour tous les stagiaires qui ont mangé au moins une fois
+SELECT table.colonne , table.colonne , table.colonne FROM tabledejointure
+JOIN table ON table.cléprimaire = tabledejointure.cléEtrangère
+JOIN table ON table.cléprimaire = tabledejointure.cléEtrangère
+SELECT stagiaires.prenom , bonbons.nom , mange_bonbons.date_manger FROM mange_bonbons
+JOIN stagiaires ON stagiaires.id_stagiaires = mange_bonbons.id_stagiaires
+JOIN bonbons ON bonbons.id_bonbons = mange_bonbons.id_bonbons
+WHERE quantite > 0
+Afficher le nombre de consommation de *Tagada*
+/*SELECT COUNT(quantite) FROM mange_bonbons
+JOIN bonbons ON bonbons.id_bonbons = mange_bonbons.id_bonbons
+WHERE id_bonbons = 2
+*/
+SELECT COUNT(quantite) FROM mange_bonbons
+WHERE id_bonbons = 2
+
+Afficher cette fois le total de "tagada" consommées
+Afficher le prénom du stagiaire qui a mangé le plus de bonbons
+
+
+
+
